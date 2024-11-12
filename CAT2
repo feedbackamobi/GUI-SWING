@@ -1,0 +1,148 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+class RegistrationForm extends JFrame
+{
+    private JTextField nameField, phoneField;
+    private JComboBox<String> genderBox, dayBox, monthBox, yearBox;
+    private JTextArea addressField, dataDisplay;
+    private JCheckBox termsCheck;
+    private JButton submitButton, clearButton;
+
+    public RegistrationForm()
+    {
+        // Set title and close operation
+        setTitle("Registration Form");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Set layout for the registration form
+        setLayout(new GridBagLayout());  // Using GridBagLayout for better control over component placement
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Labels and input fields
+        JLabel nameLabel = new JLabel("Name:");
+        gbc.gridx = 0; gbc.gridy = 0;
+        add(nameLabel, gbc);
+        nameField = new JTextField(15);
+        gbc.gridx = 1; gbc.gridy = 0;
+        add(nameField, gbc);
+
+        JLabel phoneLabel = new JLabel("Phone:");
+        gbc.gridx = 0; gbc.gridy = 1;
+        add(phoneLabel, gbc);
+        phoneField = new JTextField(15);
+        gbc.gridx = 1; gbc.gridy = 1;
+        add(phoneField, gbc);
+
+        JLabel genderLabel = new JLabel("Gender:");
+        gbc.gridx = 0; gbc.gridy = 2;
+        add(genderLabel, gbc);
+        String[] genderOptions = { "Male", "Female" };
+        genderBox = new JComboBox<>(genderOptions);
+        gbc.gridx = 1; gbc.gridy = 2;
+        add(genderBox, gbc);
+
+        JLabel dobLabel = new JLabel("Date of Birth:");
+        gbc.gridx = 0; gbc.gridy = 3;
+        add(dobLabel, gbc);
+        String[] dayOptions = new String[31];
+        for (int i = 1; i <= 31; i++) {
+            dayOptions[i - 1] = String.valueOf(i);
+        }
+        dayBox = new JComboBox<>(dayOptions);
+
+        String[] monthOptions = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+        monthBox = new JComboBox<>(monthOptions);
+
+        String[] yearOptions = new String[44];
+        for (int i = 1980; i <= 2023; i++) {
+            yearOptions[i - 1980] = String.valueOf(i);
+        }
+        yearBox = new JComboBox<>(yearOptions);
+
+        gbc.gridx = 1; gbc.gridy = 3;
+        add(dayBox, gbc);
+        gbc.gridx = 2; gbc.gridy = 3;
+        add(monthBox, gbc);
+        gbc.gridx = 3; gbc.gridy = 3;
+        add(yearBox, gbc);
+
+        JLabel addressLabel = new JLabel("Address:");
+        gbc.gridx = 0; gbc.gridy = 4;
+        add(addressLabel, gbc);
+        addressField = new JTextArea(3, 15);
+        gbc.gridx = 1; gbc.gridy = 4;
+        add(new JScrollPane(addressField), gbc);
+
+        termsCheck = new JCheckBox("Accept Terms and Conditions");
+        gbc.gridx = 1; gbc.gridy = 5;
+        add(termsCheck, gbc);
+
+        submitButton = new JButton("Submit");
+        gbc.gridx = 0; gbc.gridy = 6;
+        add(submitButton, gbc);
+
+        clearButton = new JButton("Clear");
+        gbc.gridx = 1; gbc.gridy = 6;
+        add(clearButton, gbc);
+
+        // Display area for entered data
+        dataDisplay = new JTextArea(10, 20);
+        dataDisplay.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(dataDisplay);
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
+        add(scrollPane, gbc);
+
+        // Add action listeners for buttons
+        submitButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (termsCheck.isSelected()) 
+                {
+                    String data = "Name: " + nameField.getText() +
+                                  "\nPhone: " + phoneField.getText() +
+                                  "\nGender: " + genderBox.getSelectedItem() +
+                                  "\nDate of Birth: " + dayBox.getSelectedItem() + " " + 
+                                  monthBox.getSelectedItem() + " " + yearBox.getSelectedItem() +
+                                  "\nAddress: " + addressField.getText();
+                    dataDisplay.setText(data);
+                } 
+                else 
+                {
+                    JOptionPane.showMessageDialog(null, "Please accept the terms and conditions to proceed.");
+                }
+            }
+        });
+
+        clearButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                nameField.setText("");
+                phoneField.setText("");
+                addressField.setText("");
+                termsCheck.setSelected(false);
+                dataDisplay.setText("");
+                genderBox.setSelectedIndex(0);
+                dayBox.setSelectedIndex(0);
+                monthBox.setSelectedIndex(0);
+                yearBox.setSelectedIndex(0);
+            }
+        });
+
+        // Set window size and make it visible
+        setSize(400, 600);
+        setVisible(true);
+    }
+
+    public static void main(String[] args)
+    {
+        new RegistrationForm();
+    }
+}
